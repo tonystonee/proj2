@@ -7,4 +7,5 @@ struct packet
   int number;
 //max pckset size 1024
   char data[1024];
+int type;
 };

@@ -14,6 +14,7 @@ int main (int argc, char*argv[]){
   struct sockaddr_storage mem;
   socklen_t memSize, client_length;
   int sock, n, port, file_size, packet_amount, i;
+struct packet p;
   FILE *fp;
  if(argc < 1){
 	printf("enter port number \n");
@@ -25,7 +26,7 @@ port = atoi(argv[1]);
 //start up memory size
   memSize = sizeof mem;
 
-	struct packet p;
+	
 	p.number = 0;
 	//open a socket for data
   sock = socket(PF_INET, SOCK_DGRAM, 0);
@@ -51,18 +52,37 @@ printf("SERVER STARTED \n");
 		fseek(fp, 0L, SEEK_END);
 		file_size = ftell(fp);
 		fseek(fp, 0L, SEEK_SET);
-		
-		packet_amount = file_size/1024 + 1;	
-		sprintf(str, "%d", packet_amount);
-		strcpy(buffer, str);
-    	    sendto(sock, buffer , n, 0, (struct sockaddr *)&mem, memSize);
+		rewind(fp);
+		char fileArray[file_size];
+		int count;
+		for(count = 0; count < file_size; count++)
+		{
+			fscanf(fp, "%s", &fileArray[count]);
+		}
 
-	} else {
+		if (file_size% 1024)
+		{
+			packet_amount = file_size/1024;
+		}
+		else
+		{
+			packet_amount = file_size/1024 + 1;
+		}
+		int i ;
 
+		for(i = 0; i < packet_amount; i++)
+		{
+	               memset(&p, 0, sizeof (p));
+			p.number = htonl(i);
 
-	}
-	    strcpy(buffer, "file does not exist");
-    	    sendto(sock, buffer , n, 0, (struct sockaddr *)&mem, memSize);
+			memcpy(p.data, (fileArray + i*1024), 1024);
+
+			sendto(sock, &p, 1024, 0, /* send packet */
+		       (struct sockaddr *) &mem, memSize);
+		}
+	
+
+	} 
   }
 
   return 0;

@@ -3,7 +3,6 @@ CSE 422 Project 2
 By: 
 Anthony Dionise
 Big Mike Hanlon
-
 Reciever Code
 UDP
 */
@@ -22,6 +21,7 @@ int main(int argc, char*argv[]){
   const char* filename;
   char buffer[1024];
   socklen_t address_length;
+struct packet p;
 
 	if(argc < 3) {
 		printf("Please enter hostname, port, and filename: \n");
@@ -43,16 +43,16 @@ int main(int argc, char*argv[]){
 //open a new socket for communication
   sock = socket(PF_INET, SOCK_DGRAM, 0);
 
-  //while(1){
     n = strlen(filename) + 1;
 
     sendto(sock,filename,n,0,(struct sockaddr *)&server_ip_address,address_length);
+while(1){
+                n = recvfrom(sock,&p,1024,0,NULL, NULL);
+		printf("ACK");
+    printf("%s\n",p.data);
+}
 
-                n = recvfrom(sock,buffer,1024,0,NULL, NULL);
 
-    printf("Received from server: %s\n",buffer);
-
-  //}
 
   return 0;
 }
