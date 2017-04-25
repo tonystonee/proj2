@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load staticfiles %}
+     <link href="{% static 'humanakidshome/css/styles.css' %}" type="text/css" rel="stylesheet" />
+        <script src="humanakidshome/script.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Economica" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Harmattan|Julius+Sans+One|PT+Sans" rel="stylesheet">
+        <meta charset="UTF-8">
+    <title>HumanaKidsHome</title>
+
+    <script>
+        var scoreOn = false;
+        var timeOn = false;
+        var guideOn = false;
+        var surveyOn = false;
+        var challengeOn = false;
+        var challengeListOn = false;
+
+
+        function showScore() {
+            if (scoreOn == false)
+            {
+                document.getElementById('ScoreDiv').style.display = "block";
+                document.getElementById("score_button").value="Hide Score Table";
+                scoreOn = true;
+            }
+            else
+            {
+                document.getElementById('ScoreDiv').style.display = "none";
+                document.getElementById("score_button").value="Display Score Table";
+                scoreOn = false;
+            }
+        }
+        function showTime() {
+            if (timeOn == false)
+            {
+                document.getElementById('TimeDiv').style.display = "block";
+                document.getElementById("time_button").value="Hide Time Table";
+                timeOn = true;
+            }
+            else
+            {
+                document.getElementById('TimeDiv').style.display = "none";
+                document.getElementById("time_button").value="Display Time Table";
+                timeOn = false;
+            }
+        }
+        function showGuide() {
+            if (guideOn == false)
+            {
+                document.getElementById('GuideDiv').style.display = "block";
+                document.getElementById("questions_button").value="Hide Questions Table";
+                guideOn = true;
+            }
+            else
+            {
+                document.getElementById('GuideDiv').style.display = "none";
+                document.getElementById("questions_button").value="Display Questions Table";
+                guideOn = false;
+            }
+        }
+
+
+        var quizGuide = false;
+         function showQuizGuide() {
+            if (quizGuide == false)
+            {
+                document.getElementById('QuizGuideDiv').style.display = "block";
+                document.getElementById("quiz_guide_button").value="Hide Questions Table";
+                quizGuide = true;
+            }
+            else
+            {
+                document.getElementById('QuizGuideDiv').style.display = "none";
+                document.getElementById("quiz_guide_button").value="Display Questions Table";
+                quizGuide = false;
+            }
+        }
+
+        var quizOn = false
+        function showQuiz() {
+            if (quizOn == false)
+            {
+                document.getElementById('QuizDiv').style.display = "block";
+                document.getElementById("quiz_button").value="Hide Survey Table";
+                quizOn = true;
+            }
+            else
+            {
+                document.getElementById('QuizDiv').style.display = "none";
+                document.getElementById("quiz_button").value="Display Survey Table"
+                quizOn = false;
+            }
+        }
+
+
+
+
+
+        function showSurvey() {
+            if (surveyOn == false)
+            {
+                document.getElementById('SurveyDiv').style.display = "block";
+                document.getElementById("survey_button").value="Hide Survey Table";
+                surveyOn = true;
+            }
+            else
+            {
+                document.getElementById('SurveyDiv').style.display = "none";
+                document.getElementById("survey_button").value="Display Survey Table"
+                surveyOn = false;
+            }
+        }
+        function showChallenge() {
+            if (challengeOn == false)
+            {
+                document.getElementById('ChallengeDiv').style.display = "block";
+                document.getElementById("challenge_button").value="Hide Challenge Table";
+                challengeOn = true;
+            }
+            else
+            {
+                document.getElementById('ChallengeDiv').style.display = "none";
+                document.getElementById("challenge_button").value="Display Challenge Table"
+                challengeOn = false;
+            }
+        }
+
+        function showChallengeList() {
+            if (challengeListOn == false)
+            {
+                document.getElementById('challengeListDivs').style.display = "block";
+                document.getElementById("challenge_list_button").value="Hide Challenge Table";
+                challengeListOn = true;
+            }
+            else
+            {
+                document.getElementById('challengeListDivs').style.display = "none";
+                document.getElementById("challenge_list_button").value="Display Challenge Table"
+                challengeListOn = false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+
+
+
+
+    <header id="js-header">
+        <nav class="nav" id="nav">
+            <a class="logo" href="/home">
+                <img
+                id ="logoImage"
+                src="{% static 'humanakidshome/humana_kidslogo.png' %}"
+                alt="Humana Logo" >
+            </a>
+            <ul>
+            <li><a href="/../home">Home</a></li>
+            <li><a href="https://www.humana.com">Humana Home Page</a></li>
+            <li><a href="recipes">Recipes</a></li>
+            <li><a href="FAQ">F.A.Q.</a></li>
+            <li><a href="logout">Logout</a></li>
+                <li><a href = "javascript:void(0);" class="icon" onclick="expand()">☰</a></li>
+            </ul>
+        </nav>
+    </header>
+
+     <article class="content">
+
+        <br><br><br><br><br>
+        <h3>Welcome to your homepage, {{parent_name}}!</h3>
+        <p>
+            This page is used to either register a new child, or to view your already enrolled children's health statistics.
+        </p>
+        <section class="rightsidebar">
+            <nav class = buttons>
+                <form action = "to_child_register">
+                    {% csrf_token %}
+                <!-- This button is used to bring parents to the Registration Page -->
+                    <input class = button type="submit" value="Register Child Here!" id = "childregistration"/>
+                </form>
+            </nav>
+       </section>
+       <br><br><br><br><br>
+        {% if num_children != 0 %}
+        <p>
+            This section displays your children's scores for each category. The closer your child is to receiving a 100 in a category, the healthier he or she is in that aspect!
+            The score is calculated from your children's responses to the mobile app's surveys and challenges in each category.
+        </p>
+
+
+        
+
+        <input type="button" name="score" value="Display Score Chart" id = "score_button" onclick="showScore()" />
+        <input type="button" name="scoreGraph" value ="View In Graph Form" onclick="window.location.href='/home/category_scores'" />
+        <div id="ScoreDiv"  style="display:none;" class="show_score" >
+        
+            <table>
+                <tr>
+                <th>Child</th>
+                {% for name in category_names %}
+                <th>{{name}} score</th>
+                {% endfor %}
+                </tr>
+
+                {% for child_category_scores in children_category_scores  %}
+                <tr>
+                    {% for child_info in child_category_scores %}
+                        <td>{{child_info}}</td>
+                    {% endfor %}
+
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    <br><br><br><br><br>
+
+         <p>This section displays how long your child was logged into our mobile app for the past seven days. This is helpful if you want to know how long your child is on his or her phone.</p>
+        <input type="button" name="time" value="Show Time Usage Table" id = "time_button" onclick="showTime()" />
+        <input type="button" name="timeGraph" value ="View In Graph Form" onclick="window.location.href='/home/time_graph'" />
+        <div id="TimeDiv"  style="display:none;" class="show_Time" >
+
+            <table>
+                <tr>
+                    <th>Username</th>
+                    {% for day_of_week in day_to_display%}
+                    <th>{{day_of_week}}</th>
+                    {% endfor %}
+                </tr>
+
+                {% for time_table in child_times %}
+                <tr>
+                    <td>{{time_table.0}}</td>
+                    {% for times in time_table %}
+                        {% if forloop.counter != 1 %}
+                        <td>{{times}}</td>
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+ <br>
+
+<br><br><br><br><br>
+
+        <p>
+            This section display all of the survey responses for all of your children. The goal is to get most of the responses to be in the Excellent Category.
+        </p>
+        <input type="button" name="time" value="Show Survey Chart" id = "survey_button" onclick="showSurvey()" />
+        <input type="button" name="surveyGraph" value ="View In Graph Form" onclick="window.location.href='/home/survey_responses'" />
+        <div id="SurveyDiv"  style="display:none;" class="show_Survey" >
+
+            {% for child_response in children_response_list %}
+            {% for name in list_of_names %}
+            {% if forloop.counter == forloop.parentloop.counter %}
+            <h3>{{name}}'s Survey Results</h3>
+            {% endif %}
+            {% endfor %}
+            <table>
+                <tr>
+                    <th></th>
+                     {% for question in questions_to_display %}
+                    <th>Question{{forloop.counter}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td>Healthy Responses</td>
+                    <td>44</td>
+                    <td>12</td>
+                    <td>23</td>
+                    <td>17</td>
+                    <td>54</td>
+                    {% else  %}
+                    <td>Healthy Responses</td>
+                    <td>34</td>
+                    <td>21</td>
+                    <td>6</td>
+                    <td>45</td>
+                    <td>36</td>
+
+
+                    {% endif %}
+                    <!--<td>Healthy Responses</td>-->
+                    <!--{% for response in child_response.2 %}-->
+                    <!--<td>{{response}}</td>-->
+                    <!--{% endfor %}-->
+                </tr>
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td>Moderately Healthy Responses</td>
+                    <td>23</td>
+                    <td>15</td>
+                    <td>34</td>
+                    <td>25</td>
+                    <td>43</td>
+                    {% else  %}
+                    <td>Moderately Healthy Responses</td>
+                    <td>23</td>
+                    <td>34</td>
+                    <td>15</td>
+                    <td>33</td>
+                    <td>13</td>
+
+
+                    {% endif %}
+                    <!--<td>Moderately Healthy Responses</td>-->
+                    <!--{% for response in child_response.1 %}-->
+                    <!--<td>{{response}}</td>-->
+                    <!--{% endfor %}-->
+                </tr>
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    <td>Unhealthy Responses</td>
+                    <td>21</td>
+                    <td>32</td>
+                    <td>64</td>
+                    <td>28</td>
+                    <td>52</td>
+                    {% else  %}
+                    <td>Unhealthy Responses</td>
+                    <td>21</td>
+                    <td>43</td>
+                    <td>42</td>
+                    <td>14</td>
+                    <td>32</td>
+
+
+                    {% endif %}
+                    <!--<td>Unhealthy Responses</td>-->
+                    <!--{% for response in child_response.0 %}-->
+                    <!--<td>{{response}}</td>-->
+                    <!--{% endfor %}-->
+                </tr>
+                </table>
+            {% endfor %}
+    <br><br>
+            <p>This list displays the questions and answers of all the surveys that your child is asked to answer on the phone app.
+                Click the button to see the List of questions.
+            </p>
+            <input type="button" name="time" value="Show Questions List" id = "question_button" onclick="showGuide()" />
+            <div id="GuideDiv"  style="display:none;" class="show_Guide" >
+
+
+
+
+
+                <ol>
+                    {% for question in questions_to_display %}
+                    <li>{{forloop.counter}}.{{question}}
+                        <br>
+                        <ul>
+                            {% for options in survey_options_to_display %}
+
+                                {% if forloop.counter == forloop.parentloop.counter %}
+
+                                {% for option in options %}
+                                    <li>
+                                        -{{option}}
+                                    </li>
+                                    <br>
+                                {% endfor %}
+
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+
+
+<br><br><br><br><br>
+
+
+
+
+
+
+ <br>
+ 
+        <p>
+            This section displays the percentages of challenges completed for each category. When your child is on his or phone for an extended period of time, he or she will be prompted to complete a challenge to get them either
+            exercising, or at least thinking about health. The goal is to get as close as possible to 100% in each category.
+        </p>
+        <input type="button" name="time" value="View Challenge Completion Chart" id = "challenge_button"onclick="showChallenge()" />
+        <input type="button" name="challengeCompletion" value ="View In Graph Form" onclick="window.location.href='/home/challenge_completion'" />
+        <div id="ChallengeDiv"  style="display:none;" class="show_Challenge" >
+
+            <table>
+                <tr>
+                <th>Username</th>
+                {% for name in category_names %}
+                <th>{{name}} score</th>
+                {% endfor %}
+                </tr>
+
+                {% for child_completion_rates in children_completion_rates  %}
+                <tr>
+                    {% for child_info in child_completion_rates %}
+                        <td>{{child_info}}</td>
+                    {% endfor %}
+
+                </tr>
+                {% endfor %}
+            </table>
+
+<br><br>
+            <p>This button will display all of the challenges that your child is asked to complete. You can watch to see if he is doing them, or even try them with him if you want.</p>
+            <input type="button" name="time" value="Show Challenges List" id = "challenge_list_button" onclick="showChallengeList()" />
+        <div id="challengeListDivs"  style="display:none;" class="show_challenges_list" >
+            <ol>
+                {% for challenge in challenge_list %}
+                <li>{{forloop.counter}}.{{challenge}}</li><br>
+                {% endfor %}
+            </ol>
+        </div>
+
+
+        </div>
+
+ <br>
+
+
+
+
+
+
+    {% else %}
+    <p>You have no children enrolled in Humana kids currently. Click the Register Child Button to the right to get started. </p>
+
+
+
+{% endif %}
+<br><br><br><br><br><br><br><br>
+    </article>
+</body>
+</html>
